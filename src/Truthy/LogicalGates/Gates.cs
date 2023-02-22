@@ -1,4 +1,5 @@
 using System.Linq;
+namespace Truthy;
 
 public static class Gates
 {
@@ -21,7 +22,7 @@ public static class Gates
 		Not(term.Bool());
 
 	public static bool Xor(bool a, bool b, params bool[] terms) =>
-		 a != b || terms.Any(t => t != a);
+		a != b || terms.Any(t => t != a);
 
 	public static bool Xor(int a, int b, params int[] terms) =>
 		Xor(a.Bool(), b.Bool(), terms.Select(t => t.Bool()).ToArray());
@@ -44,6 +45,6 @@ public static class Gates
 	public static bool Xnor(int a, int b, params int[] terms) =>
 		Xnor(a.Bool(), b.Bool(), terms.Select(t => t.Bool()).ToArray());
 
-	public static bool Bool(this int n) =>
+	internal static bool Bool(this int n) =>
 		n >= 1;
 }
