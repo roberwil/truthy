@@ -47,4 +47,5 @@ public static class Gates
 
 	internal static bool Bool(this int n) =>
 		n >= 1;
+
 }
