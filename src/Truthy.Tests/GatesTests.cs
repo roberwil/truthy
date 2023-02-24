@@ -26,7 +26,7 @@ public class GatesTests
 	public void OrIsValidWith3Params(int a, int b, int c, int expected)
 	{
 		var actual = Gates.Or(a, b, c);
-		Assert.AreEqual(expected == 1, actual);
+		Assert.AreEqual(expected , actual);
 	}
 
 	[TestMethod]
@@ -52,7 +52,7 @@ public class GatesTests
 	public void AndIsValidWith3Params(int a, int b, int c, int expected)
 	{
 		var actual = Gates.And(a, b, c);
-		Assert.AreEqual(expected == 1, actual);
+		Assert.AreEqual(expected , actual);
 	}
 
 	[TestMethod]
@@ -87,7 +87,7 @@ public class GatesTests
 	public void XorIsValidWith3Params(int a, int b, int c, int expected)
 	{
 		var actual = Gates.Xor(a, b, c);
-		Assert.AreEqual(expected == 1, actual);
+		Assert.AreEqual(expected , actual);
 	}
 
 	[TestMethod]
@@ -114,7 +114,7 @@ public class GatesTests
 	public void NorIsValidWith3Params(int a, int b, int c, int expected)
 	{
 		var actual = Gates.Nor(a, b, c);
-		Assert.AreEqual(expected == 1, actual);
+		Assert.AreEqual(expected , actual);
 	}
 
 	[TestMethod]
@@ -141,7 +141,7 @@ public class GatesTests
 	public void NandIsValidWith3Params(int a, int b, int c, int expected)
 	{
 		var actual = Gates.Nand(a, b, c);
-		Assert.AreEqual(expected == 1, actual);
+		Assert.AreEqual(expected , actual);
 	}
 
 	[TestMethod]
@@ -167,6 +167,6 @@ public class GatesTests
 	public void XnorIsValidWith3Params(int a, int b, int c, int expected)
 	{
 		var actual = Gates.Xnor(a, b, c);
-		Assert.AreEqual(expected == 1, actual);
+		Assert.AreEqual(expected , actual);
 	}
 }
