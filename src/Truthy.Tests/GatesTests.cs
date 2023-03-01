@@ -76,11 +76,11 @@ public class GatesTests
 	}
 
 	[TestMethod]
-	[DataRow(1, 1, 1, 0)]
-	[DataRow(1, 1, 0, 1)]
-	[DataRow(1, 0, 1, 1)]
+	[DataRow(1, 1, 1, 1)]
+	[DataRow(1, 1, 0, 0)]
+	[DataRow(1, 0, 1, 0)]
 	[DataRow(1, 0, 0, 1)]
-	[DataRow(0, 1, 1, 1)]
+	[DataRow(0, 1, 1, 0)]
 	[DataRow(0, 1, 0, 1)]
 	[DataRow(0, 0, 1, 1)]
 	[DataRow(0, 0, 0, 0)]
@@ -156,11 +156,11 @@ public class GatesTests
 	}
 
 	[TestMethod]
-	[DataRow(1, 1, 1, 1)]
-	[DataRow(1, 1, 0, 0)]
-	[DataRow(1, 0, 1, 0)]
+	[DataRow(1, 1, 1, 0)]
+	[DataRow(1, 1, 0, 1)]
+	[DataRow(1, 0, 1, 1)]
 	[DataRow(1, 0, 0, 0)]
-	[DataRow(0, 1, 1, 0)]
+	[DataRow(0, 1, 1, 1)]
 	[DataRow(0, 1, 0, 0)]
 	[DataRow(0, 0, 1, 0)]
 	[DataRow(0, 0, 0, 1)]

@@ -12,8 +12,11 @@ public static partial class Gates
 	public static int Not(int term) =>
 		term == 1 ? 0 : 1;
 
+	private static int BaseXor(int a, int b) =>
+		a != b ? 1 : 0;
+
 	public static int Xor(int a, int b, params int[] terms) =>
-		(a != b) | terms.Any(t => t != a)? 1 : 0;
+		terms.Aggregate(BaseXor(a, b), BaseXor);
 
 	public static int Nor(int a, int b, params int[] terms) =>
 		Not(Or(a, b, terms));
