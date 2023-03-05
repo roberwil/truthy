@@ -48,30 +48,30 @@ public class TruthTable
 		if (Gates.Not(tableHasEnoughRows))
 			throw new TruthyException($"There should be only {_numberOfCombinations} rows.");
 
-		var rightNumberOfTerms = (terms.Length >= MinLimit).
-			And(terms.Length == _numberOfTerms);
+		var rightNumberOfTerms = terms.Length == _numberOfTerms + 1;
 
 		if (Gates.Not(rightNumberOfTerms))
-			throw new TruthyException($"There should be only {_numberOfTerms} terms.");
+			throw new TruthyException($"There should be only {_numberOfTerms + 1} terms.");
 
 		var row = terms.ToList();
 
 		if (Gates.Not(RowIsValid(row)))
-			throw new TruthyException($"The row {row} has been added already.");
+			throw new TruthyException($"The combination [{row}] has been used already.");
 
 		_rows.Add(row);
 	}
 
-	private bool RowIsValid(List<int> row)
+	private bool RowIsValid(IReadOnlyList<int> row)
 	{
-		foreach (var r in _rows)
+		foreach (var existingRow in _rows)
 		{
-			var isEqual = false;
+			var isEqual = true;
 
-			for (var i = 0; i < r.Count; i++)
-			{
+			for (var i = 0; i < existingRow.Count - 1; i++)
+				isEqual = isEqual.And(row[i] == existingRow[i]);
 
-			}
+			if (isEqual)
+				return false;
 		}
 
 		return true;
