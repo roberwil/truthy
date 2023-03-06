@@ -24,6 +24,10 @@ public class TruthTable
 	private const int MaxLimit = 10;
 	private const int MinLimit = 2;
 
+
+	private int NumberOfZeros { get; set; }
+	private int NumberOfOnes { get; set; }
+
 	private readonly List<List<int>> _rows = new ();
 
 	public TruthTable(int numberOfTerms)
@@ -59,6 +63,13 @@ public class TruthTable
 			throw new TruthyException($"The combination [{row}] has been used already.");
 
 		_rows.Add(row);
+
+		if (row[^1] == 1)
+			NumberOfOnes++;
+		else
+			NumberOfZeros++;
+
+		// TODO: Compute formula
 	}
 
 	private bool RowIsValid(IReadOnlyList<int> row)
@@ -75,6 +86,11 @@ public class TruthTable
 		}
 
 		return true;
+	}
+
+	private void Compute()
+	{
+
 	}
 
 }
