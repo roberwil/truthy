@@ -24,11 +24,17 @@ public class TruthTable
 	private const int MaxLimit = 10;
 	private const int MinLimit = 2;
 
+	private const char Self = 'S';
+	private const char Complement = 'C';
+	private readonly List<char> _formula = new();
+
+	private readonly bool _usingSumOfProducts;
+	private readonly bool _usingProductOfSums;
 
 	private int NumberOfZeros { get; set; }
 	private int NumberOfOnes { get; set; }
 
-	private readonly List<List<int>> _rows = new ();
+	private readonly List<List<int>> _rows = new();
 
 	public TruthTable(int numberOfTerms)
 	{
@@ -43,6 +49,9 @@ public class TruthTable
 				_numberOfCombinations = Combinations[numberOfTerms];
 				break;
 		}
+
+		_usingSumOfProducts = true;
+		_usingProductOfSums = false;
 	}
 
 	public void AddRow(params int[] terms)
@@ -69,7 +78,7 @@ public class TruthTable
 		else
 			NumberOfZeros++;
 
-		// TODO: Compute formula
+		Compute(row);
 	}
 
 	private bool RowIsValid(IReadOnlyList<int> row)
@@ -88,9 +97,17 @@ public class TruthTable
 		return true;
 	}
 
-	private void Compute()
+	private void Compute(List<int> row)
 	{
+		var result = row[^1];
 
+		if (_usingSumOfProducts.And(result != 1))
+			return;
+
+		if (_usingProductOfSums.And(result != 0))
+			return;
+
+		for (var i = 0; i < row.Count - 1; i++)
+			_formula.Add(row[i] == 1 ? Self : Complement);
 	}
-
 }
