@@ -9,13 +9,13 @@ public class TruthTable
 	{
 		{ 2, 4 },
 		{ 3, 8 },
-		{ 8, 16 },
-		{ 8, 32 },
-		{ 8, 64 },
-		{ 8, 128 },
+		{ 4, 16 },
+		{ 5, 32 },
+		{ 6, 64 },
+		{ 7, 128 },
 		{ 8, 256 },
-		{ 8, 512 },
-		{ 8, 1024 }
+		{ 9, 512 },
+		{ 10, 1024 }
 	};
 
 	private readonly int _numberOfCombinations;
@@ -57,7 +57,7 @@ public class TruthTable
 	{
 		var tableHasEnoughRows = _rows.Count == _numberOfCombinations;
 
-		if (Gates.Not(tableHasEnoughRows))
+		if (tableHasEnoughRows)
 			throw new TruthyException($"There should be only {_numberOfCombinations} rows.");
 
 		var rightNumberOfTerms = terms.Length == _numberOfTerms + 1;
@@ -88,8 +88,52 @@ public class TruthTable
 
 	public bool Check(params bool[] terms)
 	{
+		if (terms.Length != _numberOfTerms)
+			throw new TruthyException($"There should be only {_numberOfTerms} terms.");
+
 		ChangeAlgorithmIfNeeded();
-		return true;
+
+		var termsCursor = 0;
+		var partialResult = true;
+		var result = false;
+
+		if (_usingProductOfSums)
+		{
+			partialResult = false;
+			result = true;
+		}
+
+		foreach (var t in _formula)
+		{
+			if (_usingSumOfProducts)
+				partialResult = t == Self
+					? partialResult.And(terms[termsCursor])
+					: partialResult.And(!terms[termsCursor]);
+			else
+				partialResult = t == Self
+					? partialResult.Or(terms[termsCursor])
+					: partialResult.Or(!terms[termsCursor]);
+
+			termsCursor++;
+
+			if (termsCursor != _numberOfTerms)
+				continue;
+
+			termsCursor = 0;
+
+			if (_usingSumOfProducts)
+			{
+				result = result.Or(partialResult);
+				partialResult = true;
+			}
+			else
+			{
+				result = result.And(partialResult);
+				partialResult = false;
+			}
+		}
+
+		return result;
 	}
 
 	private bool RowIsValid(IReadOnlyList<int> row)
@@ -119,11 +163,22 @@ public class TruthTable
 			return;
 
 		for (var i = 0; i < row.Count - 1; i++)
-			_formula.Add(row[i] == 1 ? Self : Complement);
+		{
+			if (_usingSumOfProducts)
+				_formula.Add(row[i] == 1 ? Self : Complement);
+			else
+				_formula.Add(row[i] == 1 ? Complement : Self);
+		}
 	}
 
 	private void ChangeAlgorithmIfNeeded()
 	{
+		if (_usingSumOfProducts.And(NumberOfZeros == 0))
+			return;
+
+		if (_usingProductOfSums.And(NumberOfOnes == 0))
+			return;
+
 		var moreZeros = NumberOfZeros >= NumberOfOnes;
 
 		if (_usingSumOfProducts.And(moreZeros))
