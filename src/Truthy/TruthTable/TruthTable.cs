@@ -28,8 +28,8 @@ public class TruthTable
 	private const char Complement = 'C';
 	private readonly List<char> _formula = new();
 
-	private readonly bool _usingSumOfProducts;
-	private readonly bool _usingProductOfSums;
+	private bool _usingSumOfProducts;
+	private bool _usingProductOfSums;
 
 	private int NumberOfZeros { get; set; }
 	private int NumberOfOnes { get; set; }
@@ -50,8 +50,7 @@ public class TruthTable
 				break;
 		}
 
-		_usingSumOfProducts = true;
-		_usingProductOfSums = false;
+		UseSumOfProducts();
 	}
 
 	public void AddRow(params int[] terms)
@@ -71,14 +70,26 @@ public class TruthTable
 		if (Gates.Not(RowIsValid(row)))
 			throw new TruthyException($"The combination [{row}] has been used already.");
 
+		var rowOutput = row[^1];
+		var changeAlgorithm = (_rows.Count == 0).And(rowOutput == 0);
+
+		if (changeAlgorithm)
+			UseProductsOfSums();
+
 		_rows.Add(row);
 
-		if (row[^1] == 1)
+		if (rowOutput == 1)
 			NumberOfOnes++;
 		else
 			NumberOfZeros++;
 
 		Compute(row);
+	}
+
+	public bool Check(params bool[] terms)
+	{
+		ChangeAlgorithmIfNeeded();
+		return true;
 	}
 
 	private bool RowIsValid(IReadOnlyList<int> row)
@@ -99,15 +110,48 @@ public class TruthTable
 
 	private void Compute(List<int> row)
 	{
-		var result = row[^1];
+		var rowOutput = row[^1];
 
-		if (_usingSumOfProducts.And(result != 1))
+		if (_usingSumOfProducts.And(rowOutput != 1))
 			return;
 
-		if (_usingProductOfSums.And(result != 0))
+		if (_usingProductOfSums.And(rowOutput != 0))
 			return;
 
 		for (var i = 0; i < row.Count - 1; i++)
 			_formula.Add(row[i] == 1 ? Self : Complement);
+	}
+
+	private void ChangeAlgorithmIfNeeded()
+	{
+		var moreZeros = NumberOfZeros >= NumberOfOnes;
+
+		if (_usingSumOfProducts.And(moreZeros))
+			return;
+
+		if (_usingProductOfSums.And(!moreZeros))
+			return;
+
+		if (moreZeros)
+			UseSumOfProducts();
+		else
+			UseProductsOfSums();
+
+		_formula.Clear();
+
+		foreach (var row in _rows)
+			Compute(row);
+	}
+
+	private void UseSumOfProducts()
+	{
+		_usingSumOfProducts = true;
+		_usingProductOfSums = false;
+	}
+
+	private void UseProductsOfSums()
+	{
+		_usingSumOfProducts = false;
+		_usingProductOfSums = true;
 	}
 }
