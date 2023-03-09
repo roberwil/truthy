@@ -19,6 +19,41 @@ public class TruthTableTests
 	}
 
 	[TestMethod]
+	[DataRow(true, true, false)]
+	[DataRow(true, false, false)]
+	[DataRow(false, true, true)]
+	[DataRow(false, false, true)]
+	public void TruthTableOfTwoWith4RowsIsValid(bool a, bool b, bool expected)
+	{
+		var t = new TruthTable(2);
+		t.AddRow(1, 1, 0);
+		t.AddRow(1, 0, 0);
+		t.AddRow(0, 1, 1);
+		t.AddRow(0, 0, 1);
+
+		var actual = t.Check(a, b);
+
+		Assert.AreEqual(expected, actual);
+	}
+
+	[TestMethod]
+	[DataRow(true, true, false, true)]
+	[DataRow(true, false, true, false)]
+	[DataRow(false, true, true, false)]
+	[DataRow(false, false, true, false)]
+	public void TruthTableOfThreeIsValid(bool a, bool b, bool c, bool expected)
+	{
+		var t = new TruthTable(3);
+		t.AddRow(1, 1, 0, 1);
+
+		var actual = t.Check(a, b, c);
+
+		Assert.AreEqual(expected, actual);
+	}
+
+
+	// Things that throw exceptions
+	[TestMethod]
 	[ExpectedException(typeof(TruthyException))]
 	public void EqualRowsShouldNotBeAdded()
 	{
