@@ -19,8 +19,16 @@ public class TruthTable
 		{ 10, 1024 }
 	};
 
+	// Letters to parse formula
+	private static readonly List<char> Letters = new()
+	{
+		'A', 'B', 'C', 'D', 'E',
+		'F', 'G', 'H', 'I', 'J'
+	};
+
 	// The amount of possible combinations  with n terms: 2^n combinations
 	private readonly int _numberOfCombinations;
+
 	// The number of terms of a truth table
 	private readonly int _numberOfTerms;
 
@@ -161,10 +169,38 @@ public class TruthTable
 
 	public override string ToString()
 	{
-		var test1 = "(A.~B)+(A.B)";
-		var test2 = "(A+~B).(A+B)";
+		var termsCursor = 0;
+		var partialResult = string.Empty;
+		var result = string.Empty;
 
-		return "";
+
+		// Evaluate every term with the formula, depending on the algorithm being used
+		foreach (var t in _formula)
+		{
+			if (_usingSumOfProducts)
+				partialResult += t == Self
+					? $"{Letters[termsCursor]}."
+					: $"~{Letters[termsCursor]}.";
+			else
+				partialResult += t == Self
+					? $"{Letters[termsCursor]}+"
+					: $"~{Letters[termsCursor]}+";
+
+			termsCursor++;
+
+			if (termsCursor != _numberOfTerms)
+				continue;
+
+			termsCursor = 0;
+
+			result += _usingSumOfProducts
+				? $"({partialResult[..^1]})+"
+				: $"({partialResult[..^1]}).";
+
+			partialResult = string.Empty;
+		}
+
+		return result[..^1];
 	}
 
 	private bool RowIsValid(IReadOnlyList<int> row)

@@ -3,6 +3,32 @@ namespace Truthy.Tests;
 [TestClass]
 public class TruthTableTests
 {
+
+	[TestMethod]
+	public void TruthTableWith1RowHasRightFormula()
+	{
+		var t = new TruthTable(2);
+		t.AddRow(1, 1, 0);
+
+		const string expected = "(~A+~B)";
+		var actual = t.ToString();
+
+		Assert.AreEqual(expected, actual);
+	}
+
+	[TestMethod]
+	public void TruthTableWith2RowsHasRightFormula()
+	{
+		var t = new TruthTable(2);
+		t.AddRow(1, 1, 1);
+		t.AddRow(1, 0, 1);
+
+		const string expected = "(A.B)+(A.~B)";
+		var actual = t.ToString();
+
+		Assert.AreEqual(expected, actual);
+	}
+
 	[TestMethod]
 	[DataRow(true, true, false)]
 	[DataRow(true, false, true)]
@@ -85,10 +111,14 @@ public class TruthTableTests
 
 	[TestMethod]
 	[ExpectedException(typeof(TruthyException))]
-	[DataRow(true, true, true)]
-	public void CheckingTheRightNumberOfArguments(bool a, bool b, bool c)
+	public void CheckingTheRightNumberOfArguments()
 	{
+		const bool a = true;
+		const bool b = true;
+		const bool c = true;
+
 		var t = new TruthTable(2);
+
 		t.AddRow(1, 1, 0);
 		t.Check(a, b, c);
 	}
