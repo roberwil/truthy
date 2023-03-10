@@ -5,6 +5,7 @@ namespace Truthy;
 
 public class TruthTable
 {
+	// Pre-calculated number of combinations for n terms
 	private static readonly Dictionary<int, int> Combinations = new()
 	{
 		{ 2, 4 },
@@ -18,22 +19,27 @@ public class TruthTable
 		{ 10, 1024 }
 	};
 
+	// The amount of possible combinations  with n terms: 2^n combinations
 	private readonly int _numberOfCombinations;
+	// The number of terms of a truth table
 	private readonly int _numberOfTerms;
 
+	// Limits for the amount of terms in a truth table
 	private const int MaxLimit = 10;
 	private const int MinLimit = 2;
 
+	// Constants to build formula
 	private const char Self = 'S';
 	private const char Complement = 'C';
 	private readonly List<char> _formula = new();
 
+	// Flags to control which algorithm to use
 	private bool _usingSumOfProducts;
 	private bool _usingProductOfSums;
-
 	private int NumberOfZeros { get; set; }
 	private int NumberOfOnes { get; set; }
 
+	// The rows of a truth table with n + 1 elements, where n is the number of terms and +1 is the result of the row
 	private readonly List<List<int>> _rows = new();
 
 	public TruthTable(int numberOfTerms)
@@ -50,9 +56,16 @@ public class TruthTable
 				break;
 		}
 
+		// Per default, the engine uses Sum of products
 		UseSumOfProducts();
 	}
 
+	/// <summary>
+	/// Add a row to the truth table. If the truth table is of n terms, then, the row must have n + 1 elements,
+	/// where +1 is the result of the row.
+	/// </summary>
+	/// <param name="terms">The terms of the row and their result</param>
+	/// <exception cref="TruthyException"> Check the related message to debug the issue.</exception>
 	public void AddRow(params int[] terms)
 	{
 		var tableHasEnoughRows = _rows.Count == _numberOfCombinations;
@@ -86,9 +99,18 @@ public class TruthTable
 		Compute(row);
 	}
 
+	/// <summary>
+	/// Check if booleans match the truth table definition. It accepts n terms, where n is the number of
+	/// terms of the truth table.
+	/// </summary>
+	/// <param name="terms"></param>
+	/// <returns></returns>
+	/// <exception cref="TruthyException"></exception>
 	public bool Check(params bool[] terms)
 	{
-		if (terms.Length != _numberOfTerms)
+		var hasRightNumberOfTerms = terms.Length != _numberOfTerms;
+
+		if (hasRightNumberOfTerms)
 			throw new TruthyException($"There should be only {_numberOfTerms} terms.");
 
 		ChangeAlgorithmIfNeeded();
@@ -103,6 +125,7 @@ public class TruthTable
 			result = true;
 		}
 
+		// Evaluate every term with the formula, depending on the algorithm being used
 		foreach (var t in _formula)
 		{
 			if (_usingSumOfProducts)
@@ -134,6 +157,14 @@ public class TruthTable
 		}
 
 		return result;
+	}
+
+	public override string ToString()
+	{
+		var test1 = "(A.~B)+(A.B)";
+		var test2 = "(A+~B).(A+B)";
+
+		return "";
 	}
 
 	private bool RowIsValid(IReadOnlyList<int> row)
