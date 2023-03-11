@@ -154,11 +154,15 @@ public class TruthTable
 
 			if (_usingSumOfProducts)
 			{
+				if (partialResult) return true;
+
 				result = result.Or(partialResult);
 				partialResult = true;
 			}
 			else
 			{
+				if (!partialResult) return false;
+
 				result = result.And(partialResult);
 				partialResult = false;
 			}
