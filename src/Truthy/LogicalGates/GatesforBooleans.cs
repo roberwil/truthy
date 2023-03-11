@@ -1,8 +1,22 @@
 using System.Linq;
+
 namespace Truthy;
 
 public static partial class Gates
 {
+	/// <summary>
+	/// Special 'Or' evaluates if a base term, a, is equal to any other terms.
+	/// if you plan to use use it with yor objects, write your "Equals" as it will
+	/// serve as basis for comparison.
+	/// </summary>
+	/// <param name="a">Base terms to evaluate with others</param>
+	/// <param name="b">First term of comparison</param>
+	/// <param name="terms">Other terms of comparison</param>
+	/// <returns>True if 'a' is equal to any other terms; False, if not.</returns>
+	public static bool Sor(object a, object b, params object[] terms) =>
+		a.Equals(b) || terms.Contains(a);
+
+
 	/// <summary>
 	/// Perform 'Or' logical operation, i.e., operation is true if one of the terms is true
 	/// </summary>
@@ -74,5 +88,4 @@ public static partial class Gates
 	/// <returns>Boolean value of the operation</returns>
 	public static bool Xnor(bool a, bool b, params bool[] terms) =>
 		Not(Xor(a, b, terms));
-
 }
