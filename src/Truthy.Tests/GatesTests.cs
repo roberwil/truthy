@@ -4,6 +4,23 @@ namespace Truthy.Tests;
 public class GatesTests
 {
 	[TestMethod]
+	[DataRow(1, 1, 2, 4, true)]
+	[DataRow(7, 1, 2, 4, false)]
+	[DataRow("hello", "xpto", "xxy", "again", false)]
+	[DataRow("xxy", "xpto", "xxy", "again", true)]
+	[DataRow('A', 'B', 'C', 'D', false)]
+	[DataRow('B', 'B', 'C', 'D', true)]
+	[DataRow(100.2, 19.2, 12.1, 11.33, false)]
+	[DataRow(11.33, 19.2, 12.1, 11.33, true)]
+	[DataRow(true, false, false, false, false)]
+	[DataRow(true, true, false, false, true)]
+	public void SpecialOrIsValid(object a, object b, object c, object d, bool expected)
+	{
+		var actual = a.Sor(b, c, d);
+		Assert.AreEqual(expected, actual);
+	}
+
+	[TestMethod]
 	[DataRow(true, true, true)]
 	[DataRow(true, false, true)]
 	[DataRow(false, true, true)]
