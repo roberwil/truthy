@@ -33,7 +33,7 @@ public class TruthTable
 	private readonly int _numberOfTerms;
 
 	// Limits for the amount of terms in a truth table
-	private const int MaxLimit = 10;
+	private const int MaxLimit = 6;
 	private const int MinLimit = 2;
 
 	// Constants to build formula
