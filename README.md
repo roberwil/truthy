@@ -50,7 +50,7 @@ For a truth table of **n** terms, the rows take **n+1** terms, where **+1** is t
 
 - There are already enough rows for the defined truth table;
 - You try to add equal rows;
-- You try to add a row with **m** terms, where **m > n + 1**.
+- You try to add a row with **m** terms, where **m != n + 1**.
 
 After you have defined your truth table and added your rows, you can check boolean values against it as follows:
 
