@@ -1,5 +1,7 @@
 # Truthy
 
+###### **Find nuget package [here](https://www.nuget.org/packages/Truthy/).**
+
 ### What is truthy anyway?
 
 Well, think of truth table you just invented, you put your 1s and 0s and **Truthy** figures out which formula works
