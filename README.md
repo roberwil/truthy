@@ -207,5 +207,5 @@ a.Sor(b, c, d) // > True
 Gates.Sor(a, c, d) // > False
 ```
 
-**Note:** If you use it with your custom objects, write their ".Equals()" accordingly, since
+**Note:** If you use it with your custom objects, write their `.Equals()` accordingly, since
 it is what SOR uses for comparison.
