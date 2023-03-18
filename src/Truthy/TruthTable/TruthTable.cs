@@ -137,7 +137,7 @@ public class TruthTable
 		if (_cache.TryGetValue(cacheCode, out var cacheResult))
 			return cacheResult;
 
-		// No cached result, so, tet us find out and then cache it
+		// No cached result, so, let us find out and then cache it
 		var termsCursor = 0;
 		var partialResult = true;
 		var result = false;
