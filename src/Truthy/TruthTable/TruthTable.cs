@@ -131,6 +131,13 @@ public class TruthTable
 
 		ChangeAlgorithmIfNeeded();
 
+		// Try to get result from Cache
+		var cacheCode = GetRowCacheCode(terms);
+
+		if (_cache.TryGetValue(cacheCode, out var cacheResult))
+			return cacheResult;
+
+		// No cached result, so, tet us find out and then cache it
 		var termsCursor = 0;
 		var partialResult = true;
 		var result = false;
@@ -178,13 +185,13 @@ public class TruthTable
 			}
 		}
 
+		// Cache the result
+		_cache.Add(cacheCode, result);
 		return result;
 	}
 
-	public string GetRowCacheCode(params bool[] terms)
-	{
-		return string.Empty;
-	}
+	private static string GetRowCacheCode(params bool[] terms) =>
+		 terms.Aggregate(string.Empty, (current, term) => current + (term ? "T" : "F"));
 
 	/// <summary>
 	/// Computes the formula equivalent in string.

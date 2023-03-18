@@ -3,6 +3,16 @@ namespace Truthy.Tests;
 [TestClass]
 public class TruthTableTests
 {
+	/*[TestMethod]
+	[DataRow(true, true, "TT")]
+	[DataRow(true, false, "TF")]
+	[DataRow(false, false, "FF")]
+	[DataRow(false, true, "FT")]
+	public void RowCacheCodeIsValid(bool a, bool b, string cacheCode)
+	{
+		var actualCacheCode = TruthTable.GetRowCacheCode(a, b);
+		Assert.AreEqual(cacheCode, actualCacheCode);
+	}*/
 
 	[TestMethod]
 	public void TruthTableWith1RowHasRightFormula()
@@ -58,6 +68,28 @@ public class TruthTableTests
 		t.AddRow(0, 0, 1);
 
 		var actual = t.Check(a, b);
+
+		Assert.AreEqual(expected, actual);
+	}
+
+	[TestMethod]
+	[DataRow(true, true, false)]
+	[DataRow(true, false, false)]
+	[DataRow(false, true, true)]
+	[DataRow(false, false, true)]
+	public void TruthTableOfTwoWith4RowsIsValidWithCache(bool a, bool b, bool expected)
+	{
+		var t = new TruthTable(2);
+		t.AddRow(1, 1, 0);
+		t.AddRow(1, 0, 0);
+		t.AddRow(0, 1, 1);
+		t.AddRow(0, 0, 1);
+
+		var actual = t.Check(a, b);
+		actual = t.Check(a, b); //gets result from cache
+		actual = t.Check(a, b); //gets result from cache
+		actual = t.Check(a, b); //gets result from cache
+		actual = t.Check(a, b); //gets result from cache
 
 		Assert.AreEqual(expected, actual);
 	}
