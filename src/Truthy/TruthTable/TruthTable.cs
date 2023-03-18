@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+// Custom type
+using Row = System.Collections.Generic.List<int>;
 
 namespace Truthy;
 
@@ -18,6 +21,9 @@ public class TruthTable
 		{ 9, 512 },
 		{ 10, 1024 }
 	};
+
+	// Cache
+	private readonly Dictionary<string, bool> _cache = new();
 
 	// Letters to parse formula
 	private static readonly List<char> Letters = new()
@@ -48,7 +54,7 @@ public class TruthTable
 	private int NumberOfOnes { get; set; }
 
 	// The rows of a truth table with n + 1 elements, where n is the number of terms and +1 is the result of the row
-	private readonly List<List<int>> _rows = new();
+	private readonly List<Row> _rows = new();
 
 	public TruthTable(int numberOfTerms)
 	{
@@ -85,6 +91,8 @@ public class TruthTable
 
 		if (Gates.Not(rightNumberOfTerms))
 			throw new TruthyException($"There should be only {_numberOfTerms + 1} terms.");
+
+		_cache.Clear();
 
 		var row = terms.ToList();
 
@@ -154,15 +162,17 @@ public class TruthTable
 
 			if (_usingSumOfProducts)
 			{
+				// Since it is "OR" gate, if one is true, then the rest is
 				if (partialResult) return true;
-
+				// ... search continues
 				result = result.Or(partialResult);
 				partialResult = true;
 			}
 			else
 			{
+				// Since it is "AND" gate, if one is false, the whole opeartion is
 				if (!partialResult) return false;
-
+				// ... search continues
 				result = result.And(partialResult);
 				partialResult = false;
 			}
@@ -171,6 +181,15 @@ public class TruthTable
 		return result;
 	}
 
+	public string GetRowCacheCode(params bool[] terms)
+	{
+		return string.Empty;
+	}
+
+	/// <summary>
+	/// Computes the formula equivalent in string.
+	/// </summary>
+	/// <returns>The formula you would use to compute on your own, raw!</returns>
 	public override string ToString()
 	{
 		var termsCursor = 0;
@@ -207,6 +226,11 @@ public class TruthTable
 		return result[..^1];
 	}
 
+	/// <summary>
+	/// A row is valid if no ther row equal to itself was added already
+	/// </summary>
+	/// <param name="row">The rwo to be checked</param>
+	/// <returns>True if row is valid; False toherwise</returns>
 	private bool RowIsValid(IReadOnlyList<int> row)
 	{
 		foreach (var existingRow in _rows)
@@ -223,6 +247,10 @@ public class TruthTable
 		return true;
 	}
 
+	/// <summary>
+	/// Evaluates a row to extract part of the formula depending on the algorithm
+	/// </summary>
+	/// <param name="row">The row to be evaluated</param>
 	private void Compute(List<int> row)
 	{
 		var rowOutput = row[^1];
@@ -264,6 +292,7 @@ public class TruthTable
 			UseProductsOfSums();
 
 		_formula.Clear();
+		_cache.Clear();
 
 		foreach (var row in _rows)
 			Compute(row);
