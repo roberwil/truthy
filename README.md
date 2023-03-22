@@ -183,9 +183,9 @@ var a = (2+2==4)
 var b = (2+1==3)
 var c = (2+1==5)
 
-a.Or(b) // > False
-a.Or(b, c) // > False
-Gates.Or(c, c) // > True
+a.Nor(b) // > False
+a.Nor(b, c) // > False
+Gates.Nor(c, c) // > True
 ```
 
 `.Xnor`is the inverse of XOR operation.
@@ -195,8 +195,8 @@ var a = (2+2==4)
 var b = (2+1==3)
 var c = (2+1==5)
 
-a.Xor(b) // > True
-a.Xor(c) // > False
+a.Xnor(b) // > True
+a.Xnor(c) // > False
 ```
 
 `.Sor` is the Special OR. Suppose you have a base object you want to compare with other objects, so that to know
