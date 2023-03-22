@@ -172,8 +172,8 @@ var a = (2+2==4)
 var b = (2+1==3)
 var c = (2+1==5)
 
-a.And(b) // > False
-a.And(b, c) // > True
+a.Nand(b) // > False
+a.Nand(b, c) // > True
 ```
 
 `.Nor` is the inverse of OR operation.
